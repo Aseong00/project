@@ -1,6 +1,7 @@
 package com.project.cafe.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +27,7 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public String login(String id , String pwd , boolean rememberId, HttpServletResponse response, HttpServletRequest request) throws Exception{
+    public String login(@CookieValue("id") String cookieId, String id , String pwd , String toURL, boolean rememberId, HttpServletResponse response, HttpServletRequest request) throws Exception{
         // 1. 아아디와 패스워드를 확인
         if (!loginCheck(id, pwd)) {
         //    일치하지 않으면 , loginForm으로 이동
@@ -48,9 +49,9 @@ public class LoginController {
 
             response.addCookie(cookie);
         }
+        toURL = toURL==null || toURL.equals("") ? "/" : toURL;
 
-
-        return "redirect:/";
+        return "redirect:" +toURL;
     }
 
     private boolean loginCheck(String id, String pwd) {
