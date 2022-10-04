@@ -6,7 +6,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.net.URLEncoder;
 
 @Controller
@@ -17,12 +19,14 @@ public class LoginController {
     public String loginForm() {
         return "loginForm";
     }
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/";
+    }
 
     @PostMapping("/login")
-    public String login(String id , String pwd , boolean rememberId, HttpServletResponse response) throws Exception{
-        System.out.println("id = " + id);
-        System.out.println("pwd = " + pwd);
-        System.out.println("rememberId = " + rememberId);
+    public String login(String id , String pwd , boolean rememberId, HttpServletResponse response, HttpServletRequest request) throws Exception{
         // 1. 아아디와 패스워드를 확인
         if (!loginCheck(id, pwd)) {
         //    일치하지 않으면 , loginForm으로 이동
@@ -30,6 +34,10 @@ public class LoginController {
             return "redirect:/login/login?msg=" + msg;
         }
         // 2. 아이디와 패스워드가 일치하면, 홈으로 이동
+        //    세션 객체에 아이디 저장
+        HttpSession session = request.getSession();
+        session.setAttribute("id",id);
+
         if (rememberId) {
             Cookie cookie = new Cookie("id", id);
             response.addCookie(cookie);
