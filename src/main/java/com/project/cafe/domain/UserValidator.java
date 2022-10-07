@@ -1,4 +1,4 @@
-package com.project.cafe.service;
+package com.project.cafe.domain;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;

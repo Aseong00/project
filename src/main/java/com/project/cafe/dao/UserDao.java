@@ -1,6 +1,6 @@
 package com.project.cafe.dao;
 
-import com.project.cafe.service.User;
+import com.project.cafe.domain.User;
 
 public interface UserDao {
     int deleteUser(String id);

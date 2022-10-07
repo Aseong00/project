@@ -1,6 +1,5 @@
-package com.project.cafe.service;
+package com.project.cafe.domain;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Objects;
 
