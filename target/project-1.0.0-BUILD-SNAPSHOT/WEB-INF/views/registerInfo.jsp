@@ -12,7 +12,8 @@
 <h1>name=${user.name}</h1>
 <h1>email=${user.email}</h1>
 <h1>birth=${user.birth}</h1>
-<h1>hobby=${user.num}</h1>
+<h1>num=${user.num}</h1>
+<h1>reg_date=${user.reg_date}</h1>
 
 </body>
 </html>
