@@ -4,6 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
     <typeAliases>
-        <typeAlias alias="User" type="com.project.cafe.domain.User"/>
+        <typeAlias alias="User" type="com.project.community.domain.User"/>
+        <typeAlias alias="BoardDto" type="com.project.community.domain.BoardDto"/>
     </typeAliases>
 </configuration>
