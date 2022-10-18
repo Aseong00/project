@@ -12,7 +12,15 @@ import static org.junit.Assert.*;
 @ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/spring/**/root-context.xml"})
 public class BoardDaoImplTest {
     @Autowired
-    BoardDao boardDao;
+    private BoardDao boardDao;
+    @Test
+    public void insertTestData() throws Exception {
+        boardDao.deleteAll();
+        for (int i = 1; i < 220; i++) {
+            BoardDto boardDto = new BoardDto("title" + i, "no content", "asdf");
+            boardDao.insert(boardDto);
+        }
+    }
 
     @Test
     public void select() throws Exception{
