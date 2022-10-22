@@ -68,7 +68,7 @@
     </c:if>
   </ul>
 </header>
-<section class="content_wrap">
+<div class="content_wrap">
   <table>
     <tr>
       <th>번호</th>
@@ -77,13 +77,13 @@
       <th>등록일</th>
       <th>조회수</th>
     </tr>
-    <c:forEach var="board" items="${list}">
+    <c:forEach var="boardDto" items="${list}">
       <tr>
-        <th>${board.bno}</th>
-        <th>${board.title}</th>
-        <th>${board.writer}</th>
-        <th>${board.reg_date}</th>
-        <th>${board.view_cnt}</th>
+        <th>${boardDto.bno}</th>
+        <th><a href="<c:url value='/board/read?bno=${boardDto.bno}&page=${page}&pageSize=${pageSize}'/>">${boardDto.title}</a></th>
+        <th>${boardDto.writer}</th>
+        <th>${boardDto.reg_date}</th>
+        <th>${boardDto.view_cnt}</th>
       </tr>
     </c:forEach>
   </table>
@@ -99,6 +99,16 @@
       <a href="<c:url value='/board/list?page=${ph.endPage+1}&pageSize=${ph.pageSize}'/>">&gt;</a>
     </c:if>
   </div>
-</section>
+</div>
+<script>
+  let msg= "${msg}"
+  if (msg == "DEL_OK") {
+    alert("성공적으로 삭제되었습니다.");
+  }
+  if (msg == "DEL_ERR") {
+    alert("삭제에 실패했습니다.");
+  }
+
+</script>
 </body>
 </html>

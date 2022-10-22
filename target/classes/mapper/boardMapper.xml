@@ -23,14 +23,14 @@
         delete from board where bno = #{bno} and writer = #{writer}
     </delete>
     <select id="boardSelectAll" resultType="BoardDto">
-        select bno, title, content, writer, view_cnt, comment_cnt, reg_date
-        from board
-        order by reg_date DESC ,bno DESC
+        SELECT bno, title, content, writer, view_cnt, comment_cnt, reg_date
+        FROM board
+        ORDER BY reg_date DESC, bno DESC
     </select>
     <select id="selectPage" parameterType="map" resultType="BoardDto">
-        select bno, title, content, writer, view_cnt, comment_cnt, reg_date
-        from board
-        order by reg_date DESC ,bno DESC
+        SELECT bno, title, content, writer, view_cnt, comment_cnt, reg_date
+        FROM board
+        ORDER BY reg_date DESC, bno DESC
         LIMIT #{offset}, #{pageSize}
     </select>
     <update id="increaseViewCnt" parameterType="int">
