@@ -22,6 +22,53 @@ import java.util.Map;
 public class BoardController {
     @Autowired
     BoardService boardService;
+    @PostMapping("/modify")
+    public String modify(Integer page, Integer pageSize, BoardDto boardDto, HttpSession session, Model m,RedirectAttributes redirectAttributes) {
+        String writer = (String) session.getAttribute("id");
+        boardDto.setWriter(writer);
+
+        try {
+            int rowCnt = boardService.modify(boardDto);
+            if (rowCnt != 1) {
+                throw new Exception("Modify failed");
+            } else {
+                redirectAttributes.addFlashAttribute("msg", "MOD_OK");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            m.addAttribute(boardDto);
+            m.addAttribute("msg", "MOD_ERR");
+            m.addAttribute("mode", "new");
+            return "board";
+        }
+        return "redirect:/board/list?page=" + page + "&pageSize=" + pageSize;
+    }
+    @PostMapping("/write")
+    public String write(BoardDto boardDto, HttpSession session, Model m,RedirectAttributes redirectAttributes) {
+        String writer = (String) session.getAttribute("id");
+        boardDto.setWriter(writer);
+
+        try {
+            int rowCnt = boardService.write(boardDto);
+            if (rowCnt != 1) {
+                throw new Exception("Write failed");
+            } else {
+                redirectAttributes.addFlashAttribute("msg", "WRT_OK");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            m.addAttribute(boardDto);
+            m.addAttribute("msg", "WRT_ERR");
+            m.addAttribute("mode", "new");
+            return "board";
+        }
+        return "redirect:/board/list";
+    }
+    @GetMapping("/write")
+    public String write(Model m) {
+        m.addAttribute("mode", "new");
+        return "board";
+    }
 
     @GetMapping("/read")
     public String read(Integer bno,Integer page, Integer pageSize, Model m) {
@@ -40,8 +87,6 @@ public class BoardController {
     public String remove(Integer bno, Integer page, Integer pageSize, Model m, HttpSession session, RedirectAttributes redirectAttributes) {
         String writer = (String) session.getAttribute("id");
         try {
-            m.addAttribute("page", page);
-            m.addAttribute("pageSize", pageSize);
 
             int rowCnt = boardService.remove(bno, writer);
             if (rowCnt != 1) {
@@ -53,7 +98,7 @@ public class BoardController {
             e.printStackTrace();
             redirectAttributes.addFlashAttribute("msg", "DEL_ERR");
         }
-        return "redirect:/board/list";
+        return "redirect:/board/list?page=" + page + "&pageSize=" + pageSize;
     }
     @GetMapping("/list")
     public String list(Integer page, Integer pageSize, Model m , HttpServletRequest request) {
