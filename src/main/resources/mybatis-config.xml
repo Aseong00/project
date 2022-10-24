@@ -6,5 +6,6 @@
     <typeAliases>
         <typeAlias alias="User" type="com.project.community.domain.User"/>
         <typeAlias alias="BoardDto" type="com.project.community.domain.BoardDto"/>
+        <typeAlias alias="SearchCondition" type="com.project.community.domain.SearchCondition"/>
     </typeAliases>
 </configuration>

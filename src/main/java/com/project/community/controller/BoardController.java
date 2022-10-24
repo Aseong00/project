@@ -2,6 +2,7 @@ package com.project.community.controller;
 
 import com.project.community.domain.BoardDto;
 import com.project.community.domain.PageHandler;
+import com.project.community.domain.SearchCondition;
 import com.project.community.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -101,29 +102,29 @@ public class BoardController {
         return "redirect:/board/list?page=" + page + "&pageSize=" + pageSize;
     }
     @GetMapping("/list")
-    public String list(Integer page, Integer pageSize, Model m , HttpServletRequest request) {
+    public String list(SearchCondition sc, Model m , HttpServletRequest request) {
         if (!loginCheck(request)) {
             return "redirect:/login/login?toURL=" + request.getRequestURL();
         }
-        if (page == null) {
-            page=1;
-        }
-        if (pageSize == null) {
-            pageSize =10;
-        }
+//        if (page == null) {
+//            page=1;
+//        }
+//        if (pageSize == null) {
+//            pageSize =10;
+//        }
         try {
-            int totalCnt = boardService.getCount();
-            PageHandler pageHandler = new PageHandler(totalCnt, page, pageSize);
+            int totalCnt = boardService.getSearchResultCnt(sc);
+            PageHandler pageHandler = new PageHandler(totalCnt, sc);
 
             Map map = new HashMap();
-            map.put("offset", (page - 1) * pageSize);
-            map.put("pageSize", pageSize);
+            map.put("offset", (sc.getPage() - 1) * sc.getPageSize());
+            map.put("pageSize", sc.getPageSize());
 
-            List<BoardDto> list = boardService.getPage(map);
+            List<BoardDto> list = boardService.getSearchResultPage(sc);
             m.addAttribute("list", list);
             m.addAttribute("ph", pageHandler);
-            m.addAttribute("page", page);
-            m.addAttribute("pageSize", pageSize);
+            m.addAttribute("page", sc.getPage());
+            m.addAttribute("pageSize", sc.getPageSize());
         } catch (Exception e) {
             e.printStackTrace();
         }
