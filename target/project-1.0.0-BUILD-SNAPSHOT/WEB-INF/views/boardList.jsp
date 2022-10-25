@@ -69,6 +69,16 @@
   </ul>
 </header>
 <div class="content_wrap">
+  <form action="<c:url value="/board/list"/>" class="search-form" method="get">
+    <select class="search-option" name="option">
+      <option value="A" ${ph.sc.option=='A' || ph.sc.option=='' ? "selected" : ""}>제목+내용</option>
+      <option value="T" ${ph.sc.option=='T' ? "selected" : ""}>제목만</option>
+      <option value="W" ${ph.sc.option=='W' ? "selected" : ""}>작성자</option>
+    </select>
+
+    <input type="text" name="keyword" class="search-input" type="text" value="${ph.sc.keyword}" placeholder="검색어를 입력해주세요">
+    <input type="submit" class="search-button" value="검색">
+  </form>
   <button type="button" id="writeBtn" onclick="location.href='<c:url value="/board/write"/>'">글쓰기</button>
   <table>
     <tr>
@@ -81,7 +91,7 @@
     <c:forEach var="boardDto" items="${list}">
       <tr>
         <th>${boardDto.bno}</th>
-        <th><a href="<c:url value='/board/read?bno=${boardDto.bno}&page=${page}&pageSize=${pageSize}'/>">${boardDto.title}</a></th>
+        <th><a href="<c:url value="/board/read${ph.sc.queryString}&bno=${boardDto.bno}"/>">${boardDto.title}</a></th>
         <th>${boardDto.writer}</th>
         <th>${boardDto.reg_date}</th>
         <th>${boardDto.view_cnt}</th>
@@ -91,13 +101,13 @@
   <br>
   <div>
     <c:if test="${ph.showPrev}">
-      <a href="<c:url value='/board/list?page=${ph.beginPage-1}&pageSize=${ph.pageSize}'/>">&lt;</a>
+      <a class="page" href="<c:url value="/board/list${ph.sc.getQueryString(ph.beginPage-1)}"/>">&lt;</a>
     </c:if>
     <c:forEach var="i" begin="${ph.beginPage}" end="${ph.endPage}">
-      <a href="<c:url value='/board/list?page=${i}&pageSize=${ph.pageSize}'/>">${i}</a>
+      <a class="page ${i==ph.sc.page? "paging-active" : ""}" href="<c:url value="/board/list${ph.sc.getQueryString(i)}"/>">${i}</a>
     </c:forEach>
     <c:if test="${ph.showNext}">
-      <a href="<c:url value='/board/list?page=${ph.endPage+1}&pageSize=${ph.pageSize}'/>">&gt;</a>
+      <a class="page" href="<c:url value="/board/list${ph.sc.getQueryString(ph.endPage+1)}"/>">&gt;</a>
     </c:if>
   </div>
 </div>

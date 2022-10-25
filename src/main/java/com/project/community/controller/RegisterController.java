@@ -7,10 +7,9 @@ import javax.validation.Valid;
 import com.project.community.dao.UserDao;
 import com.project.community.domain.User;
 import com.project.community.domain.UserValidator;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory .annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +35,7 @@ public class RegisterController {
     }
 
     @PostMapping("/add")
-    public String save(@Valid User user, BindingResult result, Model m) throws Exception {
+    public String save(@Valid User user, BindingResult result) throws Exception {
         System.out.println("result="+result);
         System.out.println("user="+user);
 
@@ -48,9 +47,5 @@ public class RegisterController {
             if (rowCnt == 1) return "registerInfo";
         }
         return "registerForm";
-    }
-
-    private boolean isValid(User user) {
-        return true;
     }
 }

@@ -91,12 +91,12 @@
   }
   $(document).ready(function(){
     $("#listBtn").on("click", function(){
-      location.href="<c:url value='/board/list?page=${page}&pageSize=${pageSize}'/>";
+      location.href="<c:url value='/board/list${searchCondition.queryString}'/>";
     });
     $("#removeBtn").on("click", function(){
       if (!confirm("정말로 삭제하시겠습니까?")) return;
       let form = $("#form");
-      form.attr("action", "<c:url value='/board/remove?page=${page}&pageSize=${pageSize}'/>");
+      form.attr("action", "<c:url value='/board/remove${searchCondition.queryString}'/>");
       form.attr("method", "post");
       form.submit();
     });
@@ -117,7 +117,7 @@
         $("h2").html("게시물 수정");
         return;
       }
-        form.attr("action", "<c:url value='/board/modify?page=${page}&pageSize=${pageSize}'/>");
+        form.attr("action", "<c:url value='/board/modify${searchCondition.queryString}'/>");
         form.attr("method", "post");
         form.submit();
     });
