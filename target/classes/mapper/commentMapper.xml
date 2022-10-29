@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.community.dao.CommentDao">
+    <delete id="deleteAll" parameterType="int">
+        delete from comment
+        where bno = #{bno}
+    </delete>
+    <select id="count" resultType="int" parameterType="int">
+        SELECT count(*) from comment;
+    </select>
+    <delete id="delete" parameterType="map">
+        delete from comment
+        where cno = #{cno} and commenter = #{commenter}
+    </delete>
+    <insert id="insert" parameterType="CommentDto">
+        insert into comment
+        (bno, pcno, comment, commenter, reg_date, up_date)
+        values
+        (#{bno}, #{pcno}, #{comment}, #{commenter}, now(), now())
+    </insert>
+    <select id="selectAll" parameterType="int" resultType="CommentDto">
+        SELECT cno, bno, pcno, comment, commenter, reg_date, up_date
+        FROM comment
+        WHERE bno = #{bno}
+        ORDER BY reg_date ASC, cno ASC
+    </select>
+
+    <select id="select" parameterType="int" resultType="CommentDto">
+        SELECT cno, bno, pcno, comment, commenter, reg_date, up_date
+        FROM comment
+        WHERE cno = #{cno}
+    </select>
+    <update id="update" parameterType="CommentDto">
+        update comment
+        set comment = #{comment}, up_date = now()
+        where cno = #{cno} and commenter = #{commenter}
+    </update>
+</mapper>

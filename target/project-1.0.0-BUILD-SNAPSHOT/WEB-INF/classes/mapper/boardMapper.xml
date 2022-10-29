@@ -70,4 +70,9 @@
         WHERE true
         <include refid="searchCondition"/>
     </select>
+    <update id="updateCommentCnt" parameterType="map">
+        update board
+        set comment_cnt = comment_cnt + #{cnt}
+        where bno = #{bno}
+    </update>
 </mapper>
