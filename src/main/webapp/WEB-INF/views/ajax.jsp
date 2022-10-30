@@ -10,6 +10,10 @@ comment : <input type="text" name="comment"><br>
 <button id="sendBtn" type="button">SEND</button>
 <button id="modBtn" type="button">MODIFY</button>
 <div id="commentList"></div>
+<div id="replyForm" style="display: none">
+    <input type="text" name="replyComment">
+    <button type="button" id="writeReplyBtn">등록</button>
+</div>
 <script>
     let bno = 364;
     let showLIst = function (bno) {
@@ -74,7 +78,7 @@ comment : <input type="text" name="comment"><br>
             $("input[name=comment]").val(comment);
             $("#modBtn").attr("data-cno", cno);
         });
-            $("#commentList").on("click",".delBtn", function(){
+        $("#commentList").on("click",".delBtn", function(){
             let cno = $(this).parent().attr("data-cno");
             let bno = $(this).parent().attr("data-bno");
 
@@ -91,6 +95,36 @@ comment : <input type="text" name="comment"><br>
         // $(".delBtn").click(function(){
         //     alert("!!");
         // })
+        $("#commentList").on("click",".replyBtn", function() {
+            $("#replyForm").appendTo($(this).parent());
+            $("#replyForm").css("display", "block");
+        });
+        $("#writeReplyBtn").click(function(){
+            let comment = $("input[name=replyComment]").val();
+            let pcno = $("#replyForm").parent().attr("data-pcno");
+
+            if (comment.trim() == '') {
+                alert("댓글을 입력해주세요")
+                $("input[name=comment]").focus()
+                return;
+            }
+
+            $.ajax({
+                type:'POST',       // 요청 메서드
+                url: '/project/comments?bno='+bno,  // 요청 URI
+                headers : { "content-type": "application/json"}, // 요청 헤더
+                data : JSON.stringify({pcno:pcno , bno:bno, comment:comment}),
+                success : function(result){
+                    alert(result);
+                    showLIst(bno)
+                },
+                error   : function(){ alert("error") } // 에러가 발생했을 때, 호출될 함수
+            }); // $.ajax()
+
+            $("#replyForm").css("display", "none");
+            $("input[name=replyComment]").val('');
+            $("#replyForm").appendTo("body");
+        });
     });
     let toHtml = function (comments) {
         let tmp = "<ul>";
@@ -99,11 +133,14 @@ comment : <input type="text" name="comment"><br>
             tmp +='<li data-cno=' + comment.cno
             tmp +=' data-pcno=' + comment.pcno
             tmp +=' data-bno=' + comment.bno + '>'
+            if(comment.cno!=comment.pcno)
+            tmp +='ㄴ'
             tmp +=' commenter=<span class="commenter">' + comment.commenter + '</span>'
             tmp +=' commenter=<span class="comment">' + comment.comment + '</span>'
             tmp +=' up_date='+comment.up_date
             tmp +=' <button class="delBtn">삭제</button>'
             tmp +=' <button class="modBtn">수정</button>'
+            tmp +=' <button class="replyBtn">답글</button>'
             tmp +='</li>'
         })
         return tmp + "</ul>"
